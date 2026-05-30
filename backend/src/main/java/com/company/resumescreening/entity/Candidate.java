@@ -2,6 +2,7 @@ package com.company.resumescreening.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,15 +19,21 @@ public class Candidate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "full_name")
+    private String fullName;
 
     private String email;
 
     private String phone;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(name = "resume_text", columnDefinition = "LONGTEXT")
     private String resumeText;
 
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+   
+    
 }

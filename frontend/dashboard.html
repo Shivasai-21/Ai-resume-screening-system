@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<h1>Resume Screening Dashboard</h1>
+
+<section>
+
+<h3>Upload Resume</h3>
+
+<input type="file" id="resumeFile">
+
+</section>
+
+<section>
+
+<h3>Job Description</h3>
+
+<textarea id="jobDescription"></textarea>
+
+<button onclick="analyzeResume()">
+Analyze
+</button>
+
+</section>
+
+<section>
+
+<h3>Analysis Result</h3>
+
+<div id="result"></div>
+
+</section>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
