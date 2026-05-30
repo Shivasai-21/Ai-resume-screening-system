@@ -1,46 +1,35 @@
+// frontend/js/login.js
+
+const API_BASE_URL = "/api"; // Nginx proxies /api to backend
+
 document.getElementById("loginForm")
-.addEventListener("submit", async function(e){
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-const username =
-document.getElementById("username").value;
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-const password =
-document.getElementById("password").value;
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
 
-const response =
-await fetch(`${API_BASE_URL}/auth/login`,{
+      const data = await response.json();
 
-method:"POST",
+      // Save token in localStorage
+      localStorage.setItem("token", data.token);
 
-headers:{
-"Content-Type":"application/json"
-},
+      // ✅ Redirect to dashboard after successful login
+      window.location.href = "/dashboard.html";
+    } catch (err) {
+      alert("Invalid credentials. Please try again.");
+      console.error("Login error:", err);
+    }
+  });
 
-body:JSON.stringify({
-username,
-password
-})
-
-});
-
-if(response.ok){
-
-const data = await response.json();
-
-localStorage.setItem(
-"token",
-data.token
-);
-
-window.location.href="dashboard.html";
-
-}else{
-
-document.getElementById("message")
-.innerText="Login Failed";
-
-}
-
-});

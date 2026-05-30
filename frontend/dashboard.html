@@ -1,43 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css">
-</head>
-<body>
+// frontend/js/dashboard.js
 
-<h1>Resume Screening Dashboard</h1>
+const API_BASE_URL = "/api"; // Nginx proxies /api to backend
 
-<section>
+async function analyzeResume() {
+  const file = document.getElementById("resumeFile").files[0];
+  const jobDescription = document.getElementById("jobDescription").value;
 
-<h3>Upload Resume</h3>
+  if (!file || !jobDescription) {
+    alert("Please upload a resume and enter a job description.");
+    return;
+  }
 
-<input type="file" id="resumeFile">
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("jobDescription", jobDescription);
 
-</section>
+  try {
+    const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      body: formData
+    });
 
-<section>
+    if (!response.ok) {
+      throw new Error("Analysis failed");
+    }
 
-<h3>Job Description</h3>
+    const result = await response.json();
 
-<textarea id="jobDescription"></textarea>
+    // Render results
+    document.getElementById("result").innerHTML = `
+      <h4>Candidate</h4>
+      <p><strong>Name:</strong> ${result.candidateName || "N/A"}</p>
+      <p><strong>Email:</strong> ${result.candidateEmail || "N/A"}</p>
+      <p><strong>Phone:</strong> ${result.candidatePhone || "N/A"}</p>
 
-<button onclick="analyzeResume()">
-Analyze
-</button>
+      <h4>Analysis</h4>
+      <p><strong>Match Score:</strong> ${result.matchScore}%</p>
+      <p><strong>Matching Skills:</strong> ${result.matchingSkills?.join(", ") || "None"}</p>
+      <p><strong>Missing Skills:</strong> ${result.missingSkills?.join(", ") || "None"}</p>
 
-</section>
+      <h4>Interview Questions</h4>
+      <ul>
+        ${result.interviewQuestions?.map(q => `<li>${q}</li>`).join("") || "<li>No questions generated</li>"}
+      </ul>
+    `;
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Something went wrong. Please try again.");
+  }
+}
 
-<section>
+// Attach event listener to button
+document.querySelector("button[onclick='analyzeResume()']").addEventListener("click", (e) => {
+  e.preventDefault();
+  analyzeResume();
+});
 
-<h3>Analysis Result</h3>
-
-<div id="result"></div>
-
-</section>
-
-<script src="js/api.js"></script>
-<script src="js/dashboard.js"></script>
-
-</body>
-</html>

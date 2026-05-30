@@ -1,50 +1,61 @@
-async function analyzeResume(){
+// frontend/js/dashboard.js
 
-const file =
-document.getElementById("resumeFile").files[0];
+const API_BASE_URL = "/api"; // Nginx proxies /api to backend
 
-const jobDescription =
-document.getElementById("jobDescription").value;
+async function analyzeResume() {
+  const file = document.getElementById("resumeFile").files[0];
+  const jobDescription = document.getElementById("jobDescription").value;
 
-const formData = new FormData();
+  if (!file || !jobDescription) {
+    alert("Please upload a resume and enter a job description.");
+    return;
+  }
 
-formData.append("file",file);
-formData.append("jobDescription",jobDescription);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("jobDescription", jobDescription);
 
-const response =
-await fetch(`${API_BASE_URL}/resume/analyze`,{
+  try {
+    const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token")
+      },
+      body: formData
+    });
 
-method:"POST",
+    if (!response.ok) {
+      throw new Error("Analysis failed");
+    }
 
-headers:{
-Authorization:
-"Bearer "+
-localStorage.getItem("token")
-},
+    const result = await response.json();
 
-body:formData
+    // Render results
+    document.getElementById("result").innerHTML = `
+      <h4>Candidate</h4>
+      <p><strong>Name:</strong> ${result.candidateName || "N/A"}</p>
+      <p><strong>Email:</strong> ${result.candidateEmail || "N/A"}</p>
+      <p><strong>Phone:</strong> ${result.candidatePhone || "N/A"}</p>
 
+      <h4>Analysis</h4>
+      <p><strong>Match Score:</strong> ${result.matchScore}%</p>
+      <p><strong>Matching Skills:</strong> ${result.matchingSkills?.join(", ") || "None"}</p>
+      <p><strong>Missing Skills:</strong> ${result.missingSkills?.join(", ") || "None"}</p>
+
+      <h4>Interview Questions</h4>
+      <ul>
+        ${result.interviewQuestions?.map(q => `<li>${q}</li>`).join("") || "<li>No questions generated</li>"}
+      </ul>
+    `;
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Something went wrong. Please try again.");
+  }
+}
+
+// Attach event listener to form
+document.getElementById("resumeForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  analyzeResume();
 });
 
-const result =
-await response.json();
-
-document.getElementById("result").innerHTML=
-`
-<h4>Candidate</h4>
-<p>${result.candidateName}</p>
-
-<h4>Score</h4>
-<p>${result.matchScore}%</p>
-
-<h4>Matching Skills</h4>
-<p>${result.matchingSkills}</p>
-
-<h4>Missing Skills</h4>
-<p>${result.missingSkills}</p>
-
-<h4>Interview Questions</h4>
-<p>${result.interviewQuestions}</p>
-`;
-
-}
