@@ -1,61 +1,48 @@
-// frontend/js/dashboard.js
+<!DOCTYPE html>
+<html lang="en">
 
-const API_BASE_URL = "/api"; // Nginx proxies /api to backend
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer Dashboard</title>
 
-async function analyzeResume() {
-  const file = document.getElementById("resumeFile").files[0];
-  const jobDescription = document.getElementById("jobDescription").value;
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
 
-  if (!file || !jobDescription) {
-    alert("Please upload a resume and enter a job description.");
-    return;
-  }
+<body>
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("jobDescription", jobDescription);
+    <h2>Resume Screening Dashboard</h2>
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
-      },
-      body: formData
-    });
+    <form id="resumeForm">
 
-    if (!response.ok) {
-      throw new Error("Analysis failed");
-    }
+        <input
+            type="file"
+            id="resumeFile"
+            accept=".pdf,.doc,.docx"
+            required>
 
-    const result = await response.json();
+        <br><br>
 
-    // Render results
-    document.getElementById("result").innerHTML = `
-      <h4>Candidate</h4>
-      <p><strong>Name:</strong> ${result.candidateName || "N/A"}</p>
-      <p><strong>Email:</strong> ${result.candidateEmail || "N/A"}</p>
-      <p><strong>Phone:</strong> ${result.candidatePhone || "N/A"}</p>
+        <textarea
+            id="jobDescription"
+            placeholder="Paste Job Description Here"
+            rows="8"
+            cols="60"></textarea>
 
-      <h4>Analysis</h4>
-      <p><strong>Match Score:</strong> ${result.matchScore}%</p>
-      <p><strong>Matching Skills:</strong> ${result.matchingSkills?.join(", ") || "None"}</p>
-      <p><strong>Missing Skills:</strong> ${result.missingSkills?.join(", ") || "None"}</p>
+        <br><br>
 
-      <h4>Interview Questions</h4>
-      <ul>
-        ${result.interviewQuestions?.map(q => `<li>${q}</li>`).join("") || "<li>No questions generated</li>"}
-      </ul>
-    `;
-  } catch (err) {
-    console.error("Error:", err);
-    alert("Something went wrong. Please try again.");
-  }
-}
+        <button type="button" onclick="analyzeResume()">
+            Analyze Resume
+        </button>
 
-// Attach event listener to button
-document.querySelector("button[onclick='analyzeResume()']").addEventListener("click", (e) => {
-  e.preventDefault();
-  analyzeResume();
-});
+    </form>
 
+    <hr>
+
+    <div id="result"></div>
+
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>
