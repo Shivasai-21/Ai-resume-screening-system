@@ -1,48 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Analyzer Dashboard</title>
-
-    <link rel="stylesheet" href="css/dashboard.css">
+  <title>Resume Analyzer</title>
+  <link rel="stylesheet" href="./css/dashboard.css">
 </head>
-
 <body>
+  <h2>Upload Resume</h2>
+  <form id="resumeForm">
+    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />
+    <textarea id="jobDescription" placeholder="Enter job description" required></textarea>
+    <button type="submit">Analyze</button>
+  </form>
 
-    <h2>Resume Screening Dashboard</h2>
+  <div id="result"></div>
 
-    <form id="resumeForm">
-
-        <input
-            type="file"
-            id="resumeFile"
-            accept=".pdf,.doc,.docx"
-            required>
-
-        <br><br>
-
-        <textarea
-            id="jobDescription"
-            placeholder="Paste Job Description Here"
-            rows="8"
-            cols="60"></textarea>
-
-        <br><br>
-
-        <button type="button" onclick="analyzeResume()">
-            Analyze Resume
-        </button>
-
-    </form>
-
-    <hr>
-
-    <div id="result"></div>
-
-    <script src="js/dashboard.js"></script>
-
+  <script src="./js/dashboard.js"></script>
 </body>
-
 </html>
+

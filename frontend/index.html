@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Resume Analyzer</title>
+  <title>Login - Resume Analyzer</title>
+  <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
-
-  <form id="resumeForm">
-    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />
-
-    <textarea id="jobDescription" placeholder="Enter job description" required></textarea>
-
-    <button type="submit">Analyze</button>
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Login</button>
   </form>
 
-  <div id="result"></div>
-
-  <script src="./js/dashboard.js"></script>
+  <script src="./js/login.js"></script>
 </body>
 </html>
+
