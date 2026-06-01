@@ -9,13 +9,17 @@ public class ResponseParser {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public AIResponse parse(String response) throws Exception {
+    public AIResponse parse(String response) {
+        try {
+            response = response
+                    .replace("```json", "")
+                    .replace("```", "")
+                    .trim();
 
-        response = response
-                .replace("```json", "")
-                .replace("```", "")
-                .trim();
-
-        return mapper.readValue(response, AIResponse.class);
+            return mapper.readValue(response, AIResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse Gemini response", e);
+        }
     }
 }
+
