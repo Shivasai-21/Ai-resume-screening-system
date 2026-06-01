@@ -28,6 +28,18 @@ public class ResumeAnalysis {
 
     @Lob
     @Column(columnDefinition = "LONGTEXT")
+    private String strengths;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String weaknesses;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String recommendation;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String summary;
 
     @Lob
