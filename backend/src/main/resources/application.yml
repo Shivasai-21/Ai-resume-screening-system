@@ -22,11 +22,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-  security:
-    user:
-      name: admin
-      password: admin123
-
 
 management:
   endpoints:
