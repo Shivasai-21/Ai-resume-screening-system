@@ -18,9 +18,8 @@ body {
 }
 
 .sidebar button {
-  display: block;
   width: 100%;
-  margin: 10px 0;
+  margin-top: 10px;
   padding: 10px;
   background: #1f2937;
   border: none;
@@ -34,16 +33,15 @@ body {
   padding: 30px;
 }
 
-/* CARDS */
 .card {
   background: rgba(255,255,255,0.05);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-top: 20px;
   backdrop-filter: blur(10px);
 }
 
-/* INPUTS */
+/* TEXTAREA */
 textarea {
   width: 100%;
   height: 120px;
@@ -54,6 +52,7 @@ textarea {
   padding: 10px;
 }
 
+/* BUTTON */
 button {
   margin-top: 10px;
   padding: 10px;
@@ -63,12 +62,48 @@ button {
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
+/* LOADER */
+.loader {
+  text-align: center;
+  margin-top: 20px;
 }
 
-/* RESULT STYLE */
-.result-box {
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  margin: auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* RESULT GRID */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
   margin-top: 20px;
-  white-space: pre-line;
+}
+
+.full {
+  grid-column: span 2;
+}
+
+/* SCORE CIRCLE */
+.circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 8px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin: auto;
+  transition: all 1s ease;
 }

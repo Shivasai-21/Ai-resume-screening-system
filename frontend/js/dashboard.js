@@ -1,48 +1,53 @@
-const API_BASE_URL = "/api";
+document.getElementById("resumeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-async function analyzeResume() {
-
-  const file = document.getElementById("resumeFile").files[0];
+  const fileInput = document.getElementById("resumeFile");
   const jobDescription = document.getElementById("jobDescription").value;
-
   const loading = document.getElementById("loading");
-  const result = document.getElementById("result");
+  const resultBox = document.getElementById("result");
 
-  if (!file || !jobDescription) {
-    alert("Please upload resume and job description");
+  // Show loading spinner
+  loading.classList.remove("hidden");
+  resultBox.classList.add("hidden");
+
+  if (!fileInput.files.length) {
+    alert("Please upload a resume file.");
+    loading.classList.add("hidden");
     return;
   }
 
-  loading.classList.remove("hidden");
-  result.classList.add("hidden");
-
+  const file = fileInput.files[0];
   const formData = new FormData();
   formData.append("file", file);
   formData.append("jobDescription", jobDescription);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/resume/analyze`, {
+    const response = await fetch("/api/resume/analyze", {
       method: "POST",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      },
       body: formData
     });
 
-    const data = await response.json();
+    if (response.ok) {
+      const result = await response.json();
 
-    loading.classList.add("hidden");
-    result.classList.remove("hidden");
+      // Update UI
+      document.getElementById("scoreCircle").innerText = (result.matchScore || 0) + "%";
+      document.getElementById("skillsBox").innerText = result.skillsAnalysis || "No skills found";
+      document.getElementById("recommendation").innerText = result.recommendation || "No recommendation available";
 
-    // BEAUTIFUL OUTPUT
-    result.innerHTML = `
-      <h2>AI Analysis Result</h2>
-      <p><b>Match Score:</b> ${data.matchScore || "N/A"}%</p>
-      <p><b>Skills:</b> ${data.skills || "N/A"}</p>
-      <p><b>Missing Skills:</b> ${data.missingSkills || "N/A"}</p>
-      <p><b>Recommendation:</b> ${data.recommendation || "N/A"}</p>
-    `;
-
+      loading.classList.add("hidden");
+      resultBox.classList.remove("hidden");
+    } else {
+      alert("Analysis failed");
+      loading.classList.add("hidden");
+    }
   } catch (err) {
+    console.error("Error analyzing resume:", err);
+    alert("Failed to analyze resume. Check console for details.");
     loading.classList.add("hidden");
-    alert("Error calling backend API");
-    console.error(err);
   }
-}
+});
+
