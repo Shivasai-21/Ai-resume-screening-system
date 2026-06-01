@@ -1,20 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Resume Analyzer</title>
-  <link rel="stylesheet" href="./css/dashboard.css">
+  <meta charset="UTF-8">
+  <title>AI Resume Intelligence</title>
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
+
 <body>
-  <h2>Upload Resume</h2>
-  <form id="resumeForm">
-    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />
-    <textarea id="jobDescription" placeholder="Enter job description" required></textarea>
-    <button type="submit">Analyze</button>
-  </form>
 
-  <div id="result"></div>
+<div class="app">
 
-  <script src="./js/dashboard.js"></script>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>AI Recruiter</h2>
+
+    <button>🏠 Dashboard</button>
+    <button>📄 Analyze Resume</button>
+    <button>📊 Reports</button>
+    <button>⚙️ Settings</button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <h1>AI Resume Intelligence Dashboard</h1>
+
+    <!-- UPLOAD CARD -->
+    <div class="card upload-box">
+      <h3>Drop Resume Here</h3>
+      <input type="file" id="resumeFile">
+      <textarea id="jobDescription" placeholder="Paste Job Description"></textarea>
+      <button onclick="analyzeResume()">Analyze with AI</button>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading" class="hidden">AI is analyzing...</div>
+
+    <!-- RESULT -->
+    <div id="result" class="card result-box hidden"></div>
+
+  </div>
+
+</div>
+
+<script src="js/dashboard.js"></script>
 </body>
 </html>
-
