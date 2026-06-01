@@ -1,32 +1,20 @@
-const API_BASE = "/api"; // Nginx proxies to backend
+const API_BASE_URL = "/api";
 
-// Upload resume (PDF)
-export async function uploadResume(file) {
-  const formData = new FormData();
-  formData.append("resume", file);
+function getToken() {
+  return localStorage.getItem("token");
+}
 
-  const response = await fetch(`${API_BASE}/resume/upload`, {
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + getToken()
+  };
+}
+
+async function apiPost(url, data) {
+  return fetch(API_BASE_URL + url, {
     method: "POST",
-    body: formData
+    headers: authHeaders(),
+    body: JSON.stringify(data)
   });
-
-  return response.json();
 }
-
-// Submit job description
-export async function submitJobDescription(description) {
-  const response = await fetch(`${API_BASE}/job/compare`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description })
-  });
-
-  return response.json();
-}
-
-// Get interview questions
-export async function getInterviewQuestions(candidateId) {
-  const response = await fetch(`${API_BASE}/candidate/${candidateId}/questions`);
-  return response.json();
-}
-
