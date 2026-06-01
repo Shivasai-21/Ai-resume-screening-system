@@ -36,11 +36,3 @@ CREATE TABLE resume_analysis
   FOREIGN KEY(candidate_id) REFERENCES candidates(id)
 );
 
--- ✅ Seed admin user with a valid 60-character BCrypt hash for "admin123"
-INSERT INTO users (username, password, role)
-VALUES (
-  'admin',
-  '$2a$10$7EqJtq98hPqEX7fNZaFWoOe5f5J8bJ9pQ0lY8bFvFqY8ZpQ0lY8bFe',
-  'ADMIN'
-);
-

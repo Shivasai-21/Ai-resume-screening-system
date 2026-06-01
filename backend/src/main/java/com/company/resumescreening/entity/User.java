@@ -1,11 +1,7 @@
-package com.company.resumescreening.entity;
-
-import jakarta.persistence.*;
-import lombok.*;
-
-@Data
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,12 +11,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false, unique=true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(nullable=false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
