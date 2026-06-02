@@ -1,6 +1,8 @@
 package com.company.resumescreening.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
+
 import java.util.List;
 
 @Data
@@ -12,7 +14,9 @@ public class AIResponse {
 
     private Integer matchScore;
 
+    @JsonAlias({"matchedSkills"})
     private List<String> matchingSkills;
+
     private List<String> missingSkills;
 
     private List<String> strengths;

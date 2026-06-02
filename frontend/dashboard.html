@@ -5,7 +5,6 @@
   <title>AI Resume Intelligence</title>
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
-
 <body>
 <div class="app">
 
@@ -19,38 +18,53 @@
   <div class="main">
     <h1>AI Resume Intelligence Dashboard</h1>
 
-    <!-- FORM WRAPPER -->
+    <!-- Upload Form -->
     <form id="resumeForm" class="card upload-box">
       <h3>Upload Resume + Job Description</h3>
-
       <input type="file" id="resumeFile" name="resumeFile" required>
       <textarea id="jobDescription" name="jobDescription" placeholder="Paste Job Description"></textarea>
-
       <button type="submit">Analyze</button>
     </form>
 
-    <!-- LOADING -->
+    <!-- Loading Spinner -->
     <div id="loading" class="loader hidden">
       <div class="spinner"></div>
       <p>AI is analyzing resume...</p>
     </div>
 
-    <!-- RESULTS -->
+    <!-- Results -->
     <div id="result" class="hidden result-grid">
-      <div class="card">
-        <h3>Match Score</h3>
-        <div class="circle" id="scoreCircle">0%</div>
+
+      <!-- Candidate Details -->
+      <div class="card full">
+        <h3>Candidate</h3>
+        <p><strong>Name:</strong> <span id="candidateName"></span></p>
+        <p><strong>Email:</strong> <span id="candidateEmail"></span></p>
+        <p><strong>Phone:</strong> <span id="candidatePhone"></span></p>
       </div>
 
-      <div class="card">
-        <h3>Skills Analysis</h3>
-        <div id="skillsBox"></div>
+      <!-- Analysis -->
+      <div class="card full">
+        <h3>Analysis</h3>
+        <p><strong>Match Score:</strong> <span id="scoreCircle">0%</span></p>
+        <p><strong>Matched Skills:</strong> <span id="matchedSkills"></span></p>
+        <p><strong>Missing Skills:</strong> <span id="missingSkills"></span></p>
+        <p><strong>Strengths:</strong> <span id="strengths"></span></p>
+        <p><strong>Weaknesses:</strong> <span id="weaknesses"></span></p>
       </div>
 
+      <!-- Interview Questions -->
+      <div class="card full">
+        <h3>Interview Questions</h3>
+        <ul id="interviewQuestions"></ul>
+      </div>
+
+      <!-- Recommendation -->
       <div class="card full">
         <h3>AI Recommendation</h3>
         <p id="recommendation"></p>
       </div>
+
     </div>
   </div>
 </div>

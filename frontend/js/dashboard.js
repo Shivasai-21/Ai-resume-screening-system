@@ -6,7 +6,7 @@ document.getElementById("resumeForm").addEventListener("submit", async (e) => {
   const loading = document.getElementById("loading");
   const resultBox = document.getElementById("result");
 
-  // Show loading spinner
+  // Show loading
   loading.classList.remove("hidden");
   resultBox.classList.add("hidden");
 
@@ -16,9 +16,8 @@ document.getElementById("resumeForm").addEventListener("submit", async (e) => {
     return;
   }
 
-  const file = fileInput.files[0];
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", fileInput.files[0]);
   formData.append("jobDescription", jobDescription);
 
   try {
@@ -30,24 +29,68 @@ document.getElementById("resumeForm").addEventListener("submit", async (e) => {
       body: formData
     });
 
-    if (response.ok) {
-      const result = await response.json();
-
-      // Update UI
-      document.getElementById("scoreCircle").innerText = (result.matchScore || 0) + "%";
-      document.getElementById("skillsBox").innerText = result.skillsAnalysis || "No skills found";
-      document.getElementById("recommendation").innerText = result.recommendation || "No recommendation available";
-
-      loading.classList.add("hidden");
-      resultBox.classList.remove("hidden");
-    } else {
+    if (!response.ok) {
       alert("Analysis failed");
       loading.classList.add("hidden");
+      return;
     }
+
+    const result = await response.json();
+    console.log("API RESPONSE:", result);
+    console.log("matchingSkills =", result.matchingSkills);
+    console.log("matchedSkills =", result.matchedSkills);
+    // Candidate Info
+    setText("candidateName", result.candidateName);
+    setText("candidateEmail", result.candidateEmail);
+    setText("candidatePhone", result.candidatePhone);
+
+    // Analysis
+    setText("scoreCircle", (result.matchScore || 0) + "%");
+    setText("missingSkills", arrayToText(result.missingSkills));
+    // Analysis
+    setText("scoreCircle", (result.matchScore || 0) + "%");
+    setText("matchedSkills", arrayToText(result.matchingSkills));  // FIXED
+    setText("missingSkills", arrayToText(result.missingSkills));
+    setText("strengths", arrayToText(result.strengths));
+    setText("weaknesses", arrayToText(result.weaknesses));
+
+    setText("strengths", arrayToText(result.strengths));
+    setText("weaknesses", arrayToText(result.weaknesses));
+
+    // Interview Questions
+    const ul = document.getElementById("interviewQuestions");
+    ul.innerHTML = "";
+    if (Array.isArray(result.interviewQuestions)) {
+      result.interviewQuestions.forEach(q => {
+        const li = document.createElement("li");
+        li.innerText = q;
+        ul.appendChild(li);
+      });
+    }
+
+    // Recommendation
+    setText("recommendation", result.recommendation);
+
+    // Show results
+    loading.classList.add("hidden");
+    resultBox.classList.remove("hidden");
+
   } catch (err) {
     console.error("Error analyzing resume:", err);
-    alert("Failed to analyze resume. Check console for details.");
+    alert("Failed to analyze resume.");
     loading.classList.add("hidden");
   }
 });
+
+// Helpers
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = value || "N/A";
+}
+
+function arrayToText(arr) {
+  if (!arr) return "N/A";
+  if (Array.isArray(arr)) return arr.join(", ");
+  return arr;
+}
 
